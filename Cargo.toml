@@ -1,0 +1,16 @@
+[package]
+name = "jwtgen"
+version = "0.1.0"
+edition = "2021"
+
+[profile.release]
+strip = true
+lto = true
+codegen-units = 1
+
+[dependencies]
+anyhow = "1.0.97"
+clap = { version = "4.5.32", features = ["derive"] }
+clap_derive.version = "4.5.32"
+humantime = "2.2.0"
+josekit = "0.10.1"
