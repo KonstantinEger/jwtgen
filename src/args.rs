@@ -9,13 +9,13 @@ pub struct Args {
     #[arg(long, short = 'k')]
     pub jwkfile: Option<PathBuf>,
 
-    /// Issuer claim (iss)
+    /// Issuer claim (iss).
     #[arg(long)]
     pub iss: String,
 
-    /// Audience claim (aud)
+    /// Audience claim (aud), can be used multiple times.
     #[arg(long)]
-    pub aud: String,
+    pub aud: Vec<String>,
 
     /// Time to live, sets expiry (exp) accordingly.
     #[arg(long)]

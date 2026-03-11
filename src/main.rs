@@ -63,7 +63,7 @@ fn build_header(args: &Args, jwk: &Jwk) -> JwsHeader {
 fn build_payload(args: &Args) -> anyhow::Result<JwtPayload> {
     let mut payload = JwtPayload::new();
     payload.set_issuer(&args.iss);
-    payload.set_audience(vec![&args.aud]);
+    payload.set_audience(args.aud.clone());
     let exp = SystemTime::now() + args.ttl;
     payload.set_expires_at(&exp);
 
