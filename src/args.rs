@@ -1,4 +1,6 @@
-use std::{path::PathBuf, time::Duration};
+use std::time::Duration;
+use std::str::FromStr;
+use std::path::PathBuf;
 
 use clap::{Parser, ValueEnum};
 
@@ -28,7 +30,7 @@ pub struct Args {
 
     /// Add more claims to the payload.
     #[arg(short = 'c', long = "claim", value_parser = parse_key_value)]
-    pub additional_claims: Vec<(String, String)>,
+    pub additional_claims: Vec<(String, josekit::Value)>,
 }
 
 #[derive(Debug, ValueEnum, Clone, Copy)]
@@ -47,8 +49,10 @@ pub enum Alg {
     EDDSA,
 }
 
-fn parse_key_value(src: &str) -> anyhow::Result<(String, String)> {
+fn parse_key_value(src: &str) -> anyhow::Result<(String, josekit::Value)> {
     src.split_once('=')
         .ok_or_else(|| anyhow::anyhow!("invalid KEY=VALUE: no '=' found in {src}"))
-        .map(|(key, value)| (key.to_owned(), value.to_owned()))
+        .and_then(|(key, value)| {
+            Ok((key.to_owned(), josekit::Value::from_str(value)?))
+        })
 }

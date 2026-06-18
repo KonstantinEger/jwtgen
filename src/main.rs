@@ -2,17 +2,13 @@ pub mod args;
 
 use args::{Alg, Args};
 use clap::Parser;
-use josekit::{
-    jwk::Jwk,
-    jws::{
-        alg::{
-            ecdsa::EcdsaJwsAlgorithm, eddsa::EddsaJwsAlgorithm, rsassa::RsassaJwsAlgorithm,
-            rsassa_pss::RsassaPssJwsAlgorithm,
-        },
-        JwsHeader, JwsSigner,
-    },
-    jwt::JwtPayload,
-};
+use josekit::jwt::JwtPayload;
+use josekit::jws::{JwsHeader, JwsSigner};
+use josekit::jws::alg::rsassa_pss::RsassaPssJwsAlgorithm;
+use josekit::jws::alg::rsassa::RsassaJwsAlgorithm;
+use josekit::jws::alg::eddsa::EddsaJwsAlgorithm;
+use josekit::jws::alg::ecdsa::EcdsaJwsAlgorithm;
+use josekit::jwk::Jwk;
 use std::time::SystemTime;
 
 fn main() -> anyhow::Result<()> {
@@ -68,7 +64,7 @@ fn build_payload(args: &Args) -> anyhow::Result<JwtPayload> {
     payload.set_expires_at(&exp);
 
     for (key, value) in &args.additional_claims {
-        payload.set_claim(key, Some(value.as_str().into()))?;
+        payload.set_claim(key, Some(value.clone()))?;
     }
 
     Ok(payload)
