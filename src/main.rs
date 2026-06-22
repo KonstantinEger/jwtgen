@@ -36,6 +36,7 @@ fn main() -> anyhow::Result<()> {
     println!("{jwt}");
     Ok(())
 }
+
 /// Read JWK from file (or stdin).
 fn read_jwk(args: &Args) -> anyhow::Result<Jwk> {
     if let Some(path) = &args.jwkfile {
@@ -58,8 +59,13 @@ fn build_header(args: &Args, jwk: &Jwk) -> JwsHeader {
 
 fn build_payload(args: &Args) -> anyhow::Result<JwtPayload> {
     let mut payload = JwtPayload::new();
-    payload.set_issuer(&args.iss);
+
+    if let Some(iss) = &args.iss {
+        payload.set_issuer(iss);
+    }
+
     payload.set_audience(args.aud.clone());
+
     let exp = SystemTime::now() + args.ttl;
     payload.set_expires_at(&exp);
 

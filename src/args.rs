@@ -13,7 +13,7 @@ pub struct Args {
 
     /// Issuer claim (iss).
     #[arg(long)]
-    pub iss: String,
+    pub iss: Option<String>,
 
     /// Audience claim (aud), can be used multiple times.
     #[arg(long)]
